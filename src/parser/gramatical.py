@@ -71,7 +71,9 @@ class SQLTransformer(Transformer):
         if type_token.type == "TYPE_TEXT":
             dtype = schema.DataTypes.STR
 
-        return schema.CreateTableColumExp(column_name=name, column_type=dtype, column_default_value=None)
+        return schema.CreateTableColumExp(
+            column_name=name, column_type=dtype, column_default_value=None
+        )
 
     def column_name(self, items):
         return str(items[0])
@@ -86,11 +88,15 @@ class SQLTransformer(Transformer):
         values = items[2]
 
         if len(columns) != len(values):
-            raise ValueError(f"Column count {len(columns)} does not match value count {len(values)}")
+            raise ValueError(
+                f"Column count {len(columns)} does not match value count {len(values)}"
+            )
 
         values_map = []
         for i, col in enumerate(columns):
-            values_map.append(schema.InsertValueExp(column_name=col, column_value=values[i]))
+            values_map.append(
+                schema.InsertValueExp(column_name=col, column_value=values[i])
+            )
 
         return schema.InsertExp(table_name=table_name, values_map=values_map)
 
@@ -128,7 +134,7 @@ class SQLTransformer(Transformer):
             column_names=select_items_list,
             table_name=table_name,
             where_conditions=where_condition,
-            limit=limit
+            limit=limit,
         )
 
     def select_all(self, items):
@@ -180,12 +186,12 @@ class SQLTransformer(Transformer):
             "COMP_GTE": schema.Comparator.RIGHT_MORE_EQUAL,
         }
 
-        return SelectWhereExp(
+        return schema.SelectWhereExp(
             column_name=str(col_name),
             compare=op_map[op_token.type],
             value=val,
             next=None,
-            next_value=None
+            next_value=None,
         )
 
     def operand(self, items):
@@ -204,4 +210,3 @@ _parser = Lark(sql_grammar, start="start", parser="lalr")
 def parse_sql(sql_query: str):
     tree = _parser.parse(sql_query)
     return SQLTransformer().transform(tree)
-

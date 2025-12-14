@@ -1,13 +1,16 @@
 from enum import Enum
 from dataclasses import dataclass
 
+
 class DataTypes(Enum):
     INT = "int"
     STR = "str"
 
+
 class Choose(Enum):
     OR = "OR"
     AND = "AND"
+
 
 class Comparator(Enum):
     EQUAL = "="
@@ -35,6 +38,7 @@ class CreateTableExp:
 class InsertValueExp:
     column_name: str
     column_value: str | int
+
 
 @dataclass
 class InsertExp:

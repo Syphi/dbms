@@ -13,8 +13,8 @@ from src.parser.ast_schema import (
     Choose,
 )
 
-class TestParser:
 
+class TestParser:
     # ---------- CREATE TABLE Tests ----------
     def test_create_table_basic(self):
         sql = "CREATE TABLE users (id INT, name TEXT);"
