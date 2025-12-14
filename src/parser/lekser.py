@@ -12,8 +12,13 @@ def read_string(command: str) -> list:
     output_stream = []
 
     for line in command.splitlines():
+        is_comment = False
         for _token in line.split():
-            output_stream.append(_token)
+            if _token == "--":
+                is_comment = not is_comment
+                continue
+
+            if not is_comment:
+                output_stream.append(_token)
 
     return output_stream
-
