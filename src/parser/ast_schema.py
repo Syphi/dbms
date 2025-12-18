@@ -62,3 +62,15 @@ class SelectExp:
     table_name: str
     where_conditions: SelectWhereExp
     limit: int | None
+
+
+@dataclass
+class ParseError:
+    msg: str
+
+
+
+@dataclass
+class ParserResponse:
+    error: ParseError | None
+    result: CreateTableColumExp | InsertExp | SelectExp | None

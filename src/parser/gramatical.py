@@ -1,4 +1,4 @@
-from lark import Lark, Transformer
+from lark import Lark, Transformer, LarkError
 from src.parser import ast_schema as schema
 
 
@@ -207,6 +207,15 @@ class SQLTransformer(Transformer):
 _parser = Lark(sql_grammar, start="start", parser="lalr")
 
 
-def parse_sql(sql_query: str):
-    tree = _parser.parse(sql_query)
-    return SQLTransformer().transform(tree)
+def parse_sql(sql_query: str) -> schema.ParserResponse:
+    try:
+        tree = _parser.parse(sql_query)
+        return schema.ParserResponse(
+            error=None,
+            result=SQLTransformer().transform(tree)
+        )
+    except (LarkError, Exception) as e:
+        return schema.ParserResponse(
+            error=schema.ParseError(msg=str(e)),
+            result=None
+        )

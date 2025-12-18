@@ -51,7 +51,7 @@ def _perform_gramatical(stream):
     return parse_sql(stream)
 
 
-@cli_dbms.command("rrrr")
+@cli_dbms.command("input")
 @click.option(
     "-p",
     "--path",
@@ -79,5 +79,11 @@ def _parse_query(path, command):
     _stream = read_string(_input)
     _stream = parse_sql(" ".join(_stream))
 
-    pprint(_stream)
-    return _stream
+    if _stream.error:
+        click.secho(f"Error on parse a command {_stream.error.msg}!", fg="red")
+        return None
+
+    pprint(_stream.result)
+
+
+

@@ -21,6 +21,8 @@ SELECT (1) FROM table_name WHERE (2) LIMIT INT;
 if __name__ == "__main__":
     """
     ❯ python src/main.py lekser -c "SELECT * FROM table;"
-    ❯ python src/main.py rrrr -c "INSERT INTO products (id, title) VALUES (1, 'Book');"
+    ❯ python src/main.py input -c "INSERT INTO products (id, title) VALUES (1, 'Book');"
+    ❯ python src/main.py input -c "INSERT INTO coords (x, y, z) VALUES (10, 20, 30);"
+    ❯ python src/main.py input -c "INSERT INTO coords (x, y, z) VALUES (10, 20, 30. 5);"
     """
     cli_dbms()
