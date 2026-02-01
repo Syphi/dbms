@@ -2,9 +2,9 @@ import pytest
 from pathlib import Path
 import sys
 
-# Add parent directory to path to import lekser
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from parser.lekser import read_from_file, read_string
+# Add project root to path to import modules
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+from src.parser.lekser import read_from_file, read_string
 
 
 class TestLekser:

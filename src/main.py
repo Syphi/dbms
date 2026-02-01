@@ -24,5 +24,7 @@ if __name__ == "__main__":
     ❯ python src/main.py input -c "INSERT INTO products (id, title) VALUES (1, 'Book');"
     ❯ python src/main.py input -c "INSERT INTO coords (x, y, z) VALUES (10, 20, 30);"
     ❯ python src/main.py input -c "INSERT INTO coords (x, y, z) VALUES (10, 20, 30. 5);"
+
+    ❯ python src/main.py init
     """
     cli_dbms()

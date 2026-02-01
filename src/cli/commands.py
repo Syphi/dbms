@@ -4,10 +4,28 @@ from pprint import pprint
 
 from src.parser.lekser import read_string, read_from_file
 from src.parser.gramatical import parse_sql
-
+from src.storage.metadata import MetadataController
 
 @click.group()
 def cli_dbms(): ...
+
+
+@cli_dbms.command("init")
+def _init_db():
+    MetadataController.init_file()
+
+
+@cli_dbms.command("create_table")
+@click.option(
+    "-n",
+    "--name",
+    "table_name",
+    default=None,
+    type=str,
+    help="Name of the table",
+)
+def _init_db(table_name: str):
+    MetadataController().write_tables_to_metadata_file(table_name)
 
 
 @cli_dbms.command("lekser")
@@ -84,6 +102,3 @@ def _parse_query(path, command):
         return None
 
     pprint(_stream.result)
-
-
-

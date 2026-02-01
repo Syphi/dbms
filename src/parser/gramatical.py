@@ -211,11 +211,7 @@ def parse_sql(sql_query: str) -> schema.ParserResponse:
     try:
         tree = _parser.parse(sql_query)
         return schema.ParserResponse(
-            error=None,
-            result=SQLTransformer().transform(tree)
+            error=None, result=SQLTransformer().transform(tree)
         )
     except (LarkError, Exception) as e:
-        return schema.ParserResponse(
-            error=schema.ParseError(msg=str(e)),
-            result=None
-        )
+        return schema.ParserResponse(error=schema.ParseError(msg=str(e)), result=None)

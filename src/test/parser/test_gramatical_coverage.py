@@ -1,4 +1,10 @@
 import pytest
+import sys
+from pathlib import Path
+
+# Add project root to path to import modules
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
+
 from src.parser.gramatical import parse_sql
 from src.parser.ast_schema import (
     CreateTableExp,
@@ -13,8 +19,8 @@ from src.parser.ast_schema import (
     ParseError,
 )
 
-class TestGrammaticalCoverage:
 
+class TestGrammaticalCoverage:
     def test_create_table_single_int_column(self):
         sql = "CREATE TABLE users (id INT);"
         result = parse_sql(sql)
@@ -25,9 +31,9 @@ class TestGrammaticalCoverage:
                 CreateTableColumExp(
                     column_name="id",
                     column_type=DataTypes.INT,
-                    column_default_value=None
+                    column_default_value=None,
                 )
-            ]
+            ],
         )
 
     def test_create_table_multiple_columns_mixed(self):
@@ -37,10 +43,22 @@ class TestGrammaticalCoverage:
         assert result.result == CreateTableExp(
             table_name="products",
             table_columns=[
-                CreateTableColumExp(column_name="id", column_type=DataTypes.INT, column_default_value=None),
-                CreateTableColumExp(column_name="name", column_type=DataTypes.STR, column_default_value=None),
-                CreateTableColumExp(column_name="price", column_type=DataTypes.INT, column_default_value=None),
-            ]
+                CreateTableColumExp(
+                    column_name="id",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="name",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="price",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+            ],
         )
 
     def test_create_table_all_text_columns(self):
@@ -50,9 +68,17 @@ class TestGrammaticalCoverage:
         assert result.result == CreateTableExp(
             table_name="log_entries",
             table_columns=[
-                CreateTableColumExp(column_name="message", column_type=DataTypes.STR, column_default_value=None),
-                CreateTableColumExp(column_name="level", column_type=DataTypes.STR, column_default_value=None),
-            ]
+                CreateTableColumExp(
+                    column_name="message",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="level",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+            ],
         )
 
     def test_create_table_underscore_names(self):
@@ -62,9 +88,17 @@ class TestGrammaticalCoverage:
         assert result.result == CreateTableExp(
             table_name="my_custom_table",
             table_columns=[
-                CreateTableColumExp(column_name="user_id", column_type=DataTypes.INT, column_default_value=None),
-                CreateTableColumExp(column_name="first_name", column_type=DataTypes.STR, column_default_value=None),
-            ]
+                CreateTableColumExp(
+                    column_name="user_id",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="first_name",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+            ],
         )
 
     def test_create_table_many_columns(self):
@@ -74,14 +108,33 @@ class TestGrammaticalCoverage:
         assert result.result == CreateTableExp(
             table_name="big_table",
             table_columns=[
-                CreateTableColumExp(column_name="a", column_type=DataTypes.INT, column_default_value=None),
-                CreateTableColumExp(column_name="b", column_type=DataTypes.INT, column_default_value=None),
-                CreateTableColumExp(column_name="c", column_type=DataTypes.INT, column_default_value=None),
-                CreateTableColumExp(column_name="d", column_type=DataTypes.STR, column_default_value=None),
-                CreateTableColumExp(column_name="e", column_type=DataTypes.STR, column_default_value=None),
-            ]
+                CreateTableColumExp(
+                    column_name="a",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="b",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="c",
+                    column_type=DataTypes.INT,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="d",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+                CreateTableColumExp(
+                    column_name="e",
+                    column_type=DataTypes.STR,
+                    column_default_value=None,
+                ),
+            ],
         )
-
 
     # ==========================================
     # INSERT Tests (Min 5)
@@ -93,9 +146,7 @@ class TestGrammaticalCoverage:
         assert result.error is None
         assert result.result == InsertExp(
             table_name="simple_table",
-            values_map=[
-                InsertValueExp(column_name="col1", column_value=100)
-            ]
+            values_map=[InsertValueExp(column_name="col1", column_value=100)],
         )
 
     def test_insert_mixed_values(self):
@@ -106,8 +157,8 @@ class TestGrammaticalCoverage:
             table_name="users",
             values_map=[
                 InsertValueExp(column_name="id", column_value=1),
-                InsertValueExp(column_name="name", column_value="Alice")
-            ]
+                InsertValueExp(column_name="name", column_value="Alice"),
+            ],
         )
 
     def test_insert_multiple_strings(self):
@@ -118,8 +169,8 @@ class TestGrammaticalCoverage:
             table_name="logs",
             values_map=[
                 InsertValueExp(column_name="level", column_value="INFO"),
-                InsertValueExp(column_name="msg", column_value="System started")
-            ]
+                InsertValueExp(column_name="msg", column_value="System started"),
+            ],
         )
 
     def test_insert_multiple_integers(self):
@@ -131,8 +182,8 @@ class TestGrammaticalCoverage:
             values_map=[
                 InsertValueExp(column_name="x", column_value=10),
                 InsertValueExp(column_name="y", column_value=20),
-                InsertValueExp(column_name="z", column_value=30)
-            ]
+                InsertValueExp(column_name="z", column_value=30),
+            ],
         )
 
     def test_insert_values_match_columns_order(self):
@@ -143,8 +194,8 @@ class TestGrammaticalCoverage:
             table_name="metrics",
             values_map=[
                 InsertValueExp(column_name="cpu", column_value=45),
-                InsertValueExp(column_name="memory", column_value=1024)
-            ]
+                InsertValueExp(column_name="memory", column_value=1024),
+            ],
         )
 
     def test_select_wildcard(self):
@@ -152,10 +203,7 @@ class TestGrammaticalCoverage:
         result = parse_sql(sql)
         assert result.error is None
         assert result.result == SelectExp(
-            column_names=["*"],
-            table_name="users",
-            where_conditions=None,
-            limit=None
+            column_names=["*"], table_name="users", where_conditions=None, limit=None
         )
 
     def test_select_specific_columns(self):
@@ -166,7 +214,7 @@ class TestGrammaticalCoverage:
             column_names=["name", "email"],
             table_name="users",
             where_conditions=None,
-            limit=None
+            limit=None,
         )
 
     def test_select_with_simple_where(self):
@@ -181,9 +229,9 @@ class TestGrammaticalCoverage:
                 compare=Comparator.RIGHT_MORE,
                 value=100,
                 next=None,
-                next_value=None
+                next_value=None,
             ),
-            limit=None
+            limit=None,
         )
 
     def test_select_with_limit_only(self):
@@ -191,10 +239,7 @@ class TestGrammaticalCoverage:
         result = parse_sql(sql)
         assert result.error is None
         assert result.result == SelectExp(
-            column_names=["id"],
-            table_name="logs",
-            where_conditions=None,
-            limit=50
+            column_names=["id"], table_name="logs", where_conditions=None, limit=50
         )
 
     def test_select_complex_where_and_limit(self):
@@ -213,12 +258,13 @@ class TestGrammaticalCoverage:
                     compare=Comparator.LEFT_MORE,
                     value=5,
                     next=None,
-                    next_value=None
+                    next_value=None,
                 ),
-                next_value=Choose.AND
+                next_value=Choose.AND,
             ),
-            limit=20
+            limit=20,
         )
+
 
 class TestGrammaticalCoverageWithErrors:
     def test_parse_error_invalid_syntax(self):
@@ -226,19 +272,28 @@ class TestGrammaticalCoverageWithErrors:
         result = parse_sql(sql)
         assert result.result is None
         assert isinstance(result.error, ParseError)
-        assert "Unexpected end of input" in result.error.msg or "Unexpected token" in result.error.msg
+        assert (
+            "Unexpected end of input" in result.error.msg
+            or "Unexpected token" in result.error.msg
+        )
 
     def test_parse_error_missing_semicolon(self):
         sql = "SELECT * FROM users"
         result = parse_sql(sql)
         assert result.result is None
         assert isinstance(result.error, ParseError)
-        assert "Unexpected end of input" in result.error.msg or "Unexpected token" in result.error.msg
+        assert (
+            "Unexpected end of input" in result.error.msg
+            or "Unexpected token" in result.error.msg
+        )
 
     def test_parse_error_nonsense_query(self):
         sql = "FLIBBERTY GIBBET;"
         result = parse_sql(sql)
         assert result.result is None
         assert isinstance(result.error, ParseError)
-        assert "No terminal matches" in result.error.msg or "Unexpected token" in result.error.msg or "Unexpected characters" in result.error.msg
-
+        assert (
+            "No terminal matches" in result.error.msg
+            or "Unexpected token" in result.error.msg
+            or "Unexpected characters" in result.error.msg
+        )

@@ -69,7 +69,6 @@ class ParseError:
     msg: str
 
 
-
 @dataclass
 class ParserResponse:
     error: ParseError | None
