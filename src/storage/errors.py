@@ -32,3 +32,7 @@ class VersionMetadataFileError(BaseStorageError):
 class AlreadyExistsError(BaseStorageError):
     def __repr__(self):
         return "Table already exists."
+
+class NoTableFoundError(BaseStorageError):
+    def __repr__(self):
+        return "Table not exists."

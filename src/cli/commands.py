@@ -24,8 +24,21 @@ def _init_db():
     type=str,
     help="Name of the table",
 )
-def _init_db(table_name: str):
+def _create_table(table_name: str):
     MetadataController().write_tables_to_metadata_file(table_name)
+
+
+@cli_dbms.command("delete_table")
+@click.option(
+    "-n",
+    "--name",
+    "table_name",
+    default=None,
+    type=str,
+    help="Name of the table",
+)
+def _delete_table(table_name: str):
+    MetadataController().delete_table_from_metadata_file(table_name)
 
 
 @cli_dbms.command("lekser")
