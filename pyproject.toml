@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbms"
+version = "0.1.0"
+description = "A simple SQL parser and DBMS implementation"
+requires-python = ">=3.10"
+dependencies = [
+    "click",
+    "lark",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+
+[project.scripts]
+dbms = "src.main:cli_dbms"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.pytest.ini_options]
+testpaths = ["src/test"]
+pythonpath = ["."]

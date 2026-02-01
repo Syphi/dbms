@@ -1,12 +1,8 @@
 import pytest
 import os
-import sys
 from pathlib import Path
 from unittest.mock import patch
 from datetime import datetime
-
-# Add project root to path to import modules
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
 from src.storage.metadata import MetadataController, Metadata, TablesMetadata
 from src.storage.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError

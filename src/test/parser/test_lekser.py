@@ -1,9 +1,6 @@
 import pytest
 from pathlib import Path
-import sys
 
-# Add project root to path to import modules
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 from src.parser.lekser import read_from_file, read_string
 
 
