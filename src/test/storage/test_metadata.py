@@ -1,11 +1,9 @@
 import pytest
-import os
-from pathlib import Path
 from unittest.mock import patch
 from datetime import datetime
 
 from src.storage.metadata import MetadataController, Metadata, TablesMetadata
-from src.storage.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError
+from errors import MetadataFileError, InvalidMetadataFileError
 from src.storage import metadata as metadata_module
 
 

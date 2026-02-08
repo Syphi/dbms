@@ -5,13 +5,14 @@ from datetime import datetime
 from dataclasses import dataclass
 
 from src.storage.constant import METADATA_PATH, VERSION, STORAGE_PATH
-from src.storage.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError, NoTableFoundError
+from src.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError, NoTableFoundError
 
 
 @dataclass(frozen=True)
 class Metadata:
     version: str
     tables: list
+    exists_tables: set
 
 
 @dataclass(frozen=True)
@@ -72,7 +73,8 @@ class MetadataController:
 
         return Metadata(
             version=version,
-            tables=tables
+            tables=tables,
+            exists_tables=set(table.table_name for table in tables if not table.table_delete_data),
         )
 
     def write_tables_to_metadata_file(self, table_name: str):

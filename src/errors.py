@@ -36,3 +36,11 @@ class AlreadyExistsError(BaseStorageError):
 class NoTableFoundError(BaseStorageError):
     def __repr__(self):
         return "Table not exists."
+
+class NoColumnFoundError(BaseStorageError):
+    def __repr__(self):
+        return "Column not exists."
+
+class InvalidInputError(BaseStorageError):
+    def __repr__(self):
+        return "Invalid input type."
