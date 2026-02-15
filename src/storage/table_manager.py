@@ -62,9 +62,10 @@ class TableManager:
 
         with open(schema_file_path, "w") as schema_file:
             for _column in table.table_columns:
+                column_type = _column.column_type.value if hasattr(_column.column_type, 'value') else _column.column_type
                 column_definition = (
                     f"{_column.column_name}{self.column_separator}"
-                    f"{_column.column_type}{self.column_separator}"
+                    f"{column_type}{self.column_separator}"
                     f"{_column.column_default_value or '_'}\n"
                 )
                 schema_file.write(column_definition)

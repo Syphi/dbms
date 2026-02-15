@@ -5,7 +5,7 @@ from datetime import datetime
 from dataclasses import dataclass
 
 from src.storage.constant import METADATA_PATH, VERSION, STORAGE_PATH
-from src.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError, NoTableFoundError
+from src.errors import MetadataFileError, InvalidMetadataFileError, AlreadyExistsError, NoTableFoundError, VersionMetadataFileError
 
 
 @dataclass(frozen=True)
@@ -39,7 +39,7 @@ class MetadataController:
             if first_line.startswith("version:"):
                 file_version = first_line.split(":", 1)[1]
                 if file_version != VERSION:
-                    raise MetadataFileError(file_version)
+                    raise VersionMetadataFileError(file_version)
 
             else:
                 raise InvalidMetadataFileError
@@ -85,7 +85,7 @@ class MetadataController:
         with open(METADATA_PATH, "a") as file:
             storage_path = os.path.join(STORAGE_PATH, table_name)
             if os.path.exists(storage_path):
-                os.remove(storage_path)
+                shutil.rmtree(storage_path)
 
             os.makedirs(storage_path, exist_ok=True)
             file.write(f"{table_name}{self.SEPARATOR}_{self.SEPARATOR}{datetime.now().isoformat()}{self.SEPARATOR}{storage_path}\n")

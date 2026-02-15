@@ -1,10 +1,12 @@
 import click
 
-from pprint import pprint
 
 from src.parser.lekser import read_string, read_from_file
 from src.parser.gramatical import parse_sql
 from src.storage.metadata import MetadataController
+from src.storage.table_manager import TableManager
+from src.storage.page_manager import PageManager
+from src.parser.ast_schema import InsertExp, CreateTableExp
 
 @click.group()
 def cli_dbms(): ...
@@ -114,4 +116,13 @@ def _parse_query(path, command):
         click.secho(f"Error on parse a command {_stream.error.msg}!", fg="red")
         return None
 
-    pprint(_stream.result)
+    table_manager = TableManager(MetadataController())
+    page_manager = PageManager(MetadataController(), table_manager)
+
+    if isinstance(_stream.result, CreateTableExp):
+        table_manager.create_table(_stream.result)
+        click.secho(f"Table {_stream.result.table_name} created!", fg="green")
+
+    elif isinstance(_stream.result, InsertExp):
+        page_manager.write_tuple(_stream.result)
+        click.secho("Insert done!", fg="green")

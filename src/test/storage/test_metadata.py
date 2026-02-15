@@ -3,7 +3,7 @@ from unittest.mock import patch
 from datetime import datetime
 
 from src.storage.metadata import MetadataController, Metadata, TablesMetadata
-from errors import MetadataFileError, InvalidMetadataFileError
+from src.errors import MetadataFileError, InvalidMetadataFileError, VersionMetadataFileError
 from src.storage import metadata as metadata_module
 
 
@@ -34,14 +34,14 @@ class TestMetadataControllerInitFile:
             controller.init_file()
 
     def test_init_file_existing_file_with_mismatched_version_raises_error(self, tmp_path):
-        """When metadata file exists with different version, init_file should raise MetadataFileError."""
+        """When metadata file exists with different version, init_file should raise VersionMetadataFileError."""
         metadata_path = tmp_path / "metadata.txt"
         old_version = "0.0"
         metadata_path.write_text(f"version:{old_version}\n")
 
         with patch.object(metadata_module, "METADATA_PATH", str(metadata_path)):
             controller = MetadataController()
-            with pytest.raises(MetadataFileError):
+            with pytest.raises(VersionMetadataFileError):
                 controller.init_file()
 
     def test_init_file_existing_file_without_version_prefix_raises_error(self, tmp_path):
@@ -83,11 +83,11 @@ class TestMetadataControllerInitFile:
 
         with patch.object(metadata_module, "METADATA_PATH", str(metadata_path)):
             controller = MetadataController()
-            with pytest.raises(MetadataFileError) as exc_info:
+            with pytest.raises(VersionMetadataFileError) as exc_info:
                 controller.init_file()
 
             # Verify error message contains version info
-            error_message = str(exc_info.value)
+            error_message = repr(exc_info.value)
             assert metadata_module.VERSION in error_message
             assert old_version in error_message
 
@@ -177,13 +177,13 @@ class TestMetadataDataclasses:
 
     def test_metadata_dataclass_creation(self):
         """Test that Metadata dataclass can be created correctly."""
-        metadata = Metadata(version="0.1", tables=[])
+        metadata = Metadata(version="0.1", tables=[], exists_tables=set())
         assert metadata.version == "0.1"
         assert metadata.tables == []
 
     def test_metadata_dataclass_is_frozen(self):
         """Test that Metadata dataclass is immutable."""
-        metadata = Metadata(version="0.1", tables=[])
+        metadata = Metadata(version="0.1", tables=[], exists_tables=set())
         with pytest.raises(AttributeError):
             metadata.version = "0.2"
 
@@ -230,7 +230,7 @@ class TestMetadataDataclasses:
                 pages_path="/storage/orders"
             )
         ]
-        metadata = Metadata(version="0.1", tables=tables)
+        metadata = Metadata(version="0.1", tables=tables, exists_tables=set())
         assert len(metadata.tables) == 2
         assert metadata.tables[0].table_name == "users"
         assert metadata.tables[1].table_name == "orders"
@@ -254,8 +254,8 @@ class TestMetadataDataclasses:
 
     def test_metadata_equality(self):
         """Test that Metadata with same values are equal."""
-        metadata1 = Metadata(version="0.1", tables=[])
-        metadata2 = Metadata(version="0.1", tables=[])
+        metadata1 = Metadata(version="0.1", tables=[], exists_tables=set())
+        metadata2 = Metadata(version="0.1", tables=[], exists_tables=set())
         assert metadata1 == metadata2
 
     def test_tables_metadata_with_none_delete_data(self):

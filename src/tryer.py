@@ -3,15 +3,15 @@ import random
 from src.parser.gramatical import parse_sql
 from src.storage import metadata_controller, table_manager, page_manager
 
-# # 1. Create table
-# create_sql = "CREATE TABLE users (id INT, name TEXT);"
-# parsed_create = parse_sql(create_sql)
-# print(f"Creating table: {parsed_create.result}")
-# table_manager.create_table(parsed_create.result)
-# print("Table created!")
+# 1. Create table
+create_sql = "CREATE TABLE users (id INT, name TEXT);"
+parsed_create = parse_sql(create_sql)
+print(f"Creating table: {parsed_create.result}")
+table_manager.create_table(parsed_create.result)
+print("Table created!")
 
 # 2. Insert values
-for i in range(10_000):
+for i in range(1_000):
 
     first_names = ('John', 'Andy', 'Joe')
     last_names = ('Johnson', 'Smith', 'Williams')
